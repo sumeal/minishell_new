@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:24:29 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/25 12:28:03 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:03:32 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	unset_env(t_cmd *commands, char **mini_envp, int *g_exit_status)
+int	unset_env(t_cmd *commands, char **mini_envp, int *g_exit_status)
 {
 	int	i;
 
@@ -23,6 +23,7 @@ void	unset_env(t_cmd *commands, char **mini_envp, int *g_exit_status)
 		i++;
 	}
 	*g_exit_status = 0;
+	return (1);
 }
 
 void	unset_variable(char *var, char ***envp)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:03:21 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/26 08:39:08 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/08 10:55:31 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_exec_cmd
 	int		ori_out;
 	int		fdin;
 	int		fdout;
-	int		pipefd[2];
+	int		**pipefd;
 	pid_t	pid;
 	int		status;
 	int		builtin_executed;
@@ -122,7 +122,7 @@ int		execute_builtin_command(t_cmd **cmd_list,
 			char ***envp, int *g_exit_status);
 
 /*export.c*/
-void	export_variable(char **args, char ***envp, int *g_exit_status);
+int		export_variable(char **args, char ***envp, int *g_exit_status);
 void	print_sorted_envp(char **envp);
 char	**duplicate_env_array(char **envp);
 void	sort_env(char **envp);
@@ -141,7 +141,7 @@ char	*change_format(char *args);
 int		skip(char *envp1, char *envp2);
 
 /*unset.c*/
-void	unset_env(t_cmd *commands, char **mini_envp, int *g_exit_status);
+int		unset_env(t_cmd *commands, char **mini_envp, int *g_exit_status);
 void	unset_variable(char *var, char ***envp);
 int		find_index(char *var, char **envp);
 
@@ -149,9 +149,10 @@ int		find_index(char *var, char **envp);
 void	exit_program(t_cmd *commands,
 			char **mini_envp, int *g_exit_status);
 int		is_num(char *s);
-void	check_exit_value(t_cmd *commands,
+int		check_exit_value(t_cmd *commands,
 			char **mini_envp, int *g_exit_status);
 void	error_too_many_arg(int *g_exit_status);
+void	error_numeric_arg(char *cmd, int *g_exit_status);
 
 /*execution_utils.c*/
 void	save_original_fd(t_exec_cmd *vars);
@@ -168,7 +169,9 @@ int		setup_input(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status);
 int		handle_last_command_output(t_cmd *cmd, t_exec_cmd *vars);
 
 /*execution_utils3.c*/
+void	handle_signal_heredoc(int signum);
 int		hd_printf(char *hd_delimeter);
+int		exit_function(t_cmd *commands, char **mini_envp, int *g_exit_status);
 
 /*execution_builtin.c*/
 int		print_echo(char **commands, int *g_exit_status);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:01:17 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/24 12:04:33 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:58:10 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	export_variable(char **args, char ***envp, int *g_exit_status)
+int	export_variable(char **args, char ***envp, int *g_exit_status)
 {
 	int	ret_val;
 
@@ -20,7 +20,6 @@ void	export_variable(char **args, char ***envp, int *g_exit_status)
 	{
 		print_sorted_envp(*envp);
 		*g_exit_status = 0;
-		return ;
 	}
 	else
 	{
@@ -28,6 +27,7 @@ void	export_variable(char **args, char ***envp, int *g_exit_status)
 		if (ret_val)
 			*g_exit_status = 0;
 	}
+	return (1);
 }
 
 void	print_sorted_envp(char **envp)

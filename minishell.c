@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:12:22 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/27 11:21:12 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/08 12:05:17 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -598,6 +598,48 @@ char	**copy_envp(char **envp)
 	return (copy);
 }
 
+int	get_shlvl_value(char **envp)
+{
+	int		i;
+	char	*name1;
+	char	*name2;
+
+	name1 = get_var_name("SHLVL");
+	i = 0;
+	while (envp[i])
+	{
+		name2 = get_var_name(envp[i]);
+		if (name1 && name2 && ft_strcmp(name1, name2) == 0)
+		{
+			return (ft_atoi(envp[i] + (ft_strlen(envp[i]) - 1)));
+		}
+		free(name2);
+		i++;
+	}
+	free(name1);
+	return (-1);
+}
+
+void	increment_shlvl(char ***envp)
+{
+	int		index;
+	char	*new;
+	int		i;
+
+	if (check_valid_value(args[i]) < 0)
+		return (0);
+	index = find_variable("SHLVL", *envp);
+	i = get_shlvl_value(*mini_envp);
+	new = ft_strdup("");
+	if (!new)
+		return (0);
+	if (index >= 0)
+	{
+		free((*envp)[index]);
+		(*envp)[index] = new;
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	char			**mini_envp;
@@ -612,6 +654,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_exit_status = 0;
 	mini_envp = copy_envp(envp);
+	increment_shlvl(&mini_envp);
 	while (1)
 	{
 		setup_signal_handlers(&original_term, &new_term);
