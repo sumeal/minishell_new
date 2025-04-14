@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:36:19 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 11:19:27 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 22:59:23 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	print_error(char *s, int exit)
 {
+	ft_putstr_fd("bash: ", 2);
 	perror(s);
 	return (exit);
 }
@@ -22,11 +23,17 @@ void	free_path(char **paths)
 {
 	int	i;
 
-	i = -1;
-	while (paths[++i])
+	if (!paths)
+		return;
+	i = 0;
+	while (paths[i])
+	{
 		free(paths[i]);
+		i++;
+	}
 	free(paths);
 }
+
 
 char	*get_path(char *cmd, char **envp)
 {
@@ -63,7 +70,7 @@ int	setup_input(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
 		if (vars->fdin < 0)
 		{
 			*g_exit_status = 1;
-			return (print_error("open", -1));
+			return (print_error(cmd->input_file, -1));
 		}
 	}
 	else if (cmd->hd_delimeter)
@@ -93,7 +100,7 @@ int	handle_last_command_output(t_cmd *cmd, t_exec_cmd *vars)
 		flags |= O_TRUNC;
 	vars->fdout = open(cmd->output_file, flags, 0644);
 	if (vars->fdout < 0)
-		return (print_error("open", -1));
+		return (print_error(cmd->output_file, -1));
 	dup2(vars->fdout, STDOUT_FILENO);
 	close(vars->fdout);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:51:58 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 16:38:29 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 22:53:14 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,28 @@ void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
 	}
 }
 
+void	free_pipe(t_exec_cmd *vars)
+{
+	int	i;
+
+	if (!vars || !vars->pipefd)
+		return;
+
+	i = 0;
+	while (i < vars->cmd_count)
+	{
+		if (vars->pipefd[i] != NULL)
+		{
+			free(vars->pipefd[i]);
+			vars->pipefd[i] = NULL;
+		}
+		i++;
+	}
+	free(vars->pipefd);
+	vars->pipefd = NULL;
+}
+
+
 void	run_the_commands(t_cmd *cmd, int *g_exit_status,
 			t_exec_cmd *vars, char ***envp)
 {
@@ -55,6 +77,7 @@ void	run_the_commands(t_cmd *cmd, int *g_exit_status,
 	set_exit_status(vars, g_exit_status);
 	restore_original_fd(vars);
 	free(vars->pid);
+	free_pipe(vars);
 }
 
 void	execute_multiple_commands(t_cmd **cmd,

@@ -6,7 +6,7 @@
 /*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 12:01:17 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/07 14:58:10 by muzz             ###   ########.fr       */
+/*   Updated: 2025/04/14 22:45:15 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	**duplicate_env_array(char **envp)
 		return (NULL);
 	while (i < count)
 	{
-		copy[i] = ft_strdup(change_format(envp[i]));
+		copy[i] = change_format(envp[i]);
 		if (!copy[i])
 		{
 			free_path(copy);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 08:32:49 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 16:22:32 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 21:57:10 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
 {
 	if (vars->i == 0)
 	{
-		setup_input(cmd, vars, g_exit_status);
+		if (setup_input(cmd, vars, g_exit_status) < 0)
+		exit(EXIT_FAILURE);
 	}
 	else if (vars->i > 0)
 	{

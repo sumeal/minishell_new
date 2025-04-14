@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_builtin2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:51:54 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 10:00:08 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 22:48:15 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	update_env(char *dir, char *name, char ***mini_envp)
 		}
 		i++;
 	}
+	free(new);
 }
 
 int	print_env(t_cmd **cmd_list, char **envp, int *g_exit_status)
