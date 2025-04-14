@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:34:00 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/07 11:15:09 by muzz             ###   ########.fr       */
+/*   Updated: 2025/04/14 15:40:22 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,3 @@ void	set_exit_status(t_exec_cmd *vars, int *g_exit_status)
 	else
 		*g_exit_status = 127;
 }
-
-// int	handle_piped_command_output(t_exec_cmd *vars)
-// {
-// 	if (pipe(vars->pipefd) == -1)
-// 		return (print_error("pipe", -1));
-// 	vars->fdout = vars->pipefd[1];
-// 	vars->fdin = vars->pipefd[0];
-// 	return (0);
-// }
-
-// int	setup_output(t_cmd *cmd, t_exec_cmd *vars)
-// {
-// 	if (cmd->next == NULL)
-// 	{
-// 		if (cmd->output_file)
-// 		{
-// 			if (handle_last_command_output(cmd, vars) < 0)
-// 				return (-1);
-// 		}
-// 		else
-// 			vars->fdout = dup(vars->ori_out);
-// 	}
-// 	else
-// 		if (handle_piped_command_output(vars) < 0)
-// 			return (-1);
-// 	return (0);
-// }

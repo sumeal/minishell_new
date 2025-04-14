@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:03:21 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/08 10:55:31 by muzz             ###   ########.fr       */
+/*   Updated: 2025/04/14 16:48:12 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,11 @@ typedef struct s_exec_cmd
 	int		fdin;
 	int		fdout;
 	int		**pipefd;
-	pid_t	pid;
+	pid_t	*pid;
 	int		status;
 	int		builtin_executed;
+	int		cmd_count;
+	int		i;
 }	t_exec_cmd;
 
 typedef struct s_bool
@@ -112,14 +114,21 @@ int		handle_hd_apd(t_cmd *cmd, t_token **lexem);
 int		handle_redir(t_cmd *cmd, t_token **lexem);
 
 /*execution.c*/
+void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
+			int *g_exit_status, char ***envp);
+void	execute_multiple_commands(t_cmd **cmd,
+			char ***envp, int *g_exit_status);
 void	execution(t_cmd *commands, char ***mini_envp, int *g_exit_status);
-void	execute_commands(t_cmd *cmd_list, char **envp, int *g_exit_status);
-int		execute_command(t_cmd *cmd,
-			t_exec_cmd *vars, char **envp, int *g_exit_status);
-int		execute_external_command(t_cmd *cmd_list,
-			t_exec_cmd *vars, char **envp, int *g_exit_status);
 int		execute_builtin_command(t_cmd **cmd_list,
 			char ***envp, int *g_exit_status);
+
+/*execution2.c*/
+void	setup_io(t_cmd *cmd, int cmd_count,
+			t_exec_cmd *vars, int *g_exit_status);
+void	execute_external_command(t_cmd *cur, char **envp);
+void	wait_for_child(t_exec_cmd *vars);
+void	execute_command_in_child(t_cmd *cur,
+			t_exec_cmd *vars, int *g_exit_status, char ***envp);
 
 /*export.c*/
 int		export_variable(char **args, char ***envp, int *g_exit_status);
@@ -158,8 +167,6 @@ void	error_numeric_arg(char *cmd, int *g_exit_status);
 void	save_original_fd(t_exec_cmd *vars);
 void	restore_original_fd(t_exec_cmd *vars);
 void	set_exit_status(t_exec_cmd *vars, int *g_exit_status);
-int		handle_piped_command_output(t_exec_cmd *vars);
-int		setup_output(t_cmd *cmd, t_exec_cmd *vars);
 
 /*execution_utils2.c*/
 int		print_error(char *s, int exit);
@@ -172,6 +179,12 @@ int		handle_last_command_output(t_cmd *cmd, t_exec_cmd *vars);
 void	handle_signal_heredoc(int signum);
 int		hd_printf(char *hd_delimeter);
 int		exit_function(t_cmd *commands, char **mini_envp, int *g_exit_status);
+void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status);
+void	handle_output_redir(t_cmd *cmd, int cmd_count, t_exec_cmd *vars);
+
+/*execution_utils4.c*/
+int		count_command(t_cmd *cmd);
+void	closing_pipes(t_exec_cmd **vars);
 
 /*execution_builtin.c*/
 int		print_echo(char **commands, int *g_exit_status);
@@ -192,6 +205,8 @@ int		print_pwd(char **envp, int *g_exit_status);
 /*execution_builtin3.c*/
 char	*ft_getenv(char *name, char **envp);
 int		ignore_export(int *g_exit_status);
+int		count_command(t_cmd *cmd);
+void	closing_pipes(t_exec_cmd **vars);
 
 /*signal.c*/
 void	handle_signal_parent(int signum);

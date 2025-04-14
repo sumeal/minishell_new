@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:36:19 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/26 09:02:27 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 11:19:27 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ int	setup_input(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
 	}
 	else
 		vars->fdin = dup(vars->ori_in);
+	dup2(vars->fdin, STDIN_FILENO);
+	close(vars->fdin);
 	return (0);
 }
 
@@ -92,5 +94,7 @@ int	handle_last_command_output(t_cmd *cmd, t_exec_cmd *vars)
 	vars->fdout = open(cmd->output_file, flags, 0644);
 	if (vars->fdout < 0)
 		return (print_error("open", -1));
+	dup2(vars->fdout, STDOUT_FILENO);
+	close(vars->fdout);
 	return (0);
 }

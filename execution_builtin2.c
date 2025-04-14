@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:51:54 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/25 12:21:41 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:00:08 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	print_env(t_cmd **cmd_list, char **envp, int *g_exit_status)
 		have = ft_strchr(envp[i], '=');
 		if (have)
 			printf("%s\n", envp[i]);
+		have = 0;
 		i++;
 	}
 	*g_exit_status = 0;

@@ -7,6 +7,7 @@ FILES = execution_builtin.c \
 		execution_utils2.c \
 		execution_utils3.c \
 		execution.c \
+		execution2.c \
 		exit.c \
 		export.c \
 		export2.c \

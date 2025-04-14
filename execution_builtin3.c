@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:57:16 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/25 11:52:58 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:39:04 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,32 @@ int	ignore_export(int *g_exit_status)
 {
 	*g_exit_status = 0;
 	return (1);
+}
+
+int	count_command(t_cmd *cmd)
+{
+	t_cmd	*temp;
+	int		count;
+
+	count = 0;
+	temp = cmd;
+	while (temp)
+	{
+		count++;
+		temp = temp->next;
+	}
+	return (count);
+}
+
+void	closing_pipes(t_exec_cmd **vars)
+{
+	int	i;
+
+	i = 0;
+	while (i < (*vars)->cmd_count)
+	{
+		close((*vars)->pipefd[i][0]);
+		close((*vars)->pipefd[i][1]);
+		i++;
+	}
 }

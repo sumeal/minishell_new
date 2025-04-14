@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:21:31 by jchen2            #+#    #+#             */
-/*   Updated: 2025/03/25 14:07:55 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:42:42 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,8 @@ int main(int argc, char **argv, char **envp)
 	run_test("Multiple pipes", "ls -la | grep .c | wc -l", envp);
 	
 	// Complex tests
-	run_test("Complex command", "cat < file.txt | grep error | sort -r > output.log", envp);
+	run_test("Complex command", "cat < file.txt
+		| grep error | sort -r > output.log", envp);
 	
 	// Error tests
 	run_test("Invalid syntax (pipe at start)", "| echo hello", envp);
