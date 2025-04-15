@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_builtin.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:48:06 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 16:36:22 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/16 00:17:57 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	print_echo(char **commands, int *g_exit_status)
 	i = 1;
 	new_line = 0;
 	if (!commands[1])
-		printf(" ");
+		ft_putstr_fd("", STDOUT_FILENO);
 	else if (ft_strcmp(commands[1], "-n") == 0)
 	{
 		new_line = 1;
