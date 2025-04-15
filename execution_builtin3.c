@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:57:16 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 15:39:04 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/15 09:47:23 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	closing_pipes(t_exec_cmd **vars)
 	int	i;
 
 	i = 0;
-	while (i < (*vars)->cmd_count)
+	while (i < (*vars)->cmd_count - 1)
 	{
 		close((*vars)->pipefd[i][0]);
 		close((*vars)->pipefd[i][1]);

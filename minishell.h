@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:03:21 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 16:48:12 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:38:31 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,8 +183,9 @@ void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status);
 void	handle_output_redir(t_cmd *cmd, int cmd_count, t_exec_cmd *vars);
 
 /*execution_utils4.c*/
-int		count_command(t_cmd *cmd);
-void	closing_pipes(t_exec_cmd **vars);
+void	free_pipe(t_exec_cmd *vars);
+char	*get_shlvl_value(char **envp, int index);
+void	increment_shlvl(char ***envp);
 
 /*execution_builtin.c*/
 int		print_echo(char **commands, int *g_exit_status);
@@ -214,6 +215,7 @@ void	setup_signal_handlers(struct termios *original_term,
 			struct termios *new_term);
 void	handle_signal_child(int signum);
 void	setup_signal_child(void);
+void	setup_signal_heredoc(void);
 
 /*libft_utils.c*/
 char	*ft_strcpy(char *dest, char *src);

@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:59:07 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 16:40:01 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:33:41 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,10 @@ void	setup_signal_child(void)
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, handle_signal_child);
 	signal(SIGQUIT, handle_signal_child);
+}
+
+void	setup_signal_heredoc(void)
+{
+	signal(SIGINT, handle_signal_heredoc);
+	signal(SIGQUIT, SIG_IGN);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_valid_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:16:27 by jchen2            #+#    #+#             */
-/*   Updated: 2025/03/21 17:55:44 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:12:52 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static int	redir_error(t_token *next)
 	symbol = "";
 	if (!next)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+		ft_putstr_fd("minishell: syntax error ", 2);
+		ft_putstr_fd("near unexpected token `newline'\n", 2);
 		return (2);
 	}
 	if (next->type == REDIR_IN)
@@ -51,7 +52,10 @@ static int	pipe_error(t_token *next)
 		ft_putstr_fd("'\n", 2);
 	}
 	else
-		ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+	{
+		ft_putstr_fd("minishell: syntax error ", 2);
+		ft_putstr_fd("near unexpected token `newline'\n", 2);
+	}
 	return (2);
 }
 

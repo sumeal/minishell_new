@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 08:32:49 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 21:57:10 by muzz             ###   ########.fr       */
+/*   Updated: 2025/04/15 15:37:23 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_signal_heredoc(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("\n^C");
+		write(STDOUT_FILENO, "\n", 1);
 		g_signal = 130;
 	}
 }
@@ -28,7 +28,7 @@ int	hd_printf(char *hd_delimeter)
 
 	if (pipe(pipe_fd) < 0)
 		return (-1);
-	signal(SIGINT, handle_signal_heredoc);
+	setup_signal_heredoc();
 	while (1)
 	{
 		line = readline("> ");
@@ -67,7 +67,7 @@ void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
 	if (vars->i == 0)
 	{
 		if (setup_input(cmd, vars, g_exit_status) < 0)
-		exit(EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 	}
 	else if (vars->i > 0)
 	{

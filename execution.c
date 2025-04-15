@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:51:58 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 22:53:14 by muzz             ###   ########.fr       */
+/*   Updated: 2025/04/15 15:35:30 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,6 @@ void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
 	}
 }
 
-void	free_pipe(t_exec_cmd *vars)
-{
-	int	i;
-
-	if (!vars || !vars->pipefd)
-		return;
-
-	i = 0;
-	while (i < vars->cmd_count)
-	{
-		if (vars->pipefd[i] != NULL)
-		{
-			free(vars->pipefd[i]);
-			vars->pipefd[i] = NULL;
-		}
-		i++;
-	}
-	free(vars->pipefd);
-	vars->pipefd = NULL;
-}
-
-
 void	run_the_commands(t_cmd *cmd, int *g_exit_status,
 			t_exec_cmd *vars, char ***envp)
 {
@@ -77,7 +55,8 @@ void	run_the_commands(t_cmd *cmd, int *g_exit_status,
 	set_exit_status(vars, g_exit_status);
 	restore_original_fd(vars);
 	free(vars->pid);
-	free_pipe(vars);
+	if (vars->cmd_count != 1)
+		free_pipe(vars);
 }
 
 void	execute_multiple_commands(t_cmd **cmd,
@@ -86,17 +65,25 @@ void	execute_multiple_commands(t_cmd **cmd,
 	t_exec_cmd	vars;
 
 	vars.cmd_count = count_command(*cmd);
-	vars.pipefd = malloc(sizeof(int *) * vars.cmd_count);
-	vars.i = 0;
-	while (vars.i < vars.cmd_count)
+	if (vars.cmd_count > 1)
 	{
-		vars.pipefd[vars.i] = malloc(sizeof(int) * 2);
-		if (pipe(vars.pipefd[vars.i]) == -1)
+		vars.pipefd = malloc(sizeof(int *) * (vars.cmd_count - 1));
+		if (!vars.pipefd)
 		{
-			perror("pipe");
+			perror("malloc for pipefd");
 			return ;
 		}
-		vars.i++;
+		vars.i = 0;
+		while (vars.i < vars.cmd_count - 1)
+		{
+			vars.pipefd[vars.i] = malloc(sizeof(int) * 2);
+			if (pipe(vars.pipefd[vars.i]) == -1)
+			{
+				perror("pipe");
+				return ;
+			}
+			vars.i++;
+		}
 	}
 	run_the_commands(*cmd, g_exit_status, &vars, envp);
 }

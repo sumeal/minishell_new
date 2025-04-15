@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:36:19 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/14 22:59:23 by muzz             ###   ########.fr       */
+/*   Updated: 2025/04/15 16:18:10 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_path(char **paths)
 	int	i;
 
 	if (!paths)
-		return;
+		return ;
 	i = 0;
 	while (paths[i])
 	{
@@ -33,7 +33,6 @@ void	free_path(char **paths)
 	}
 	free(paths);
 }
-
 
 char	*get_path(char *cmd, char **envp)
 {
