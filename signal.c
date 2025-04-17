@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:59:07 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/15 15:33:41 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:14:35 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ void	setup_signal_handlers(struct termios *original_term,
 	*new_term = *original_term;
 	new_term->c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, new_term);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, handle_signal_parent);
 	signal(SIGQUIT, SIG_IGN);
 }
@@ -47,14 +45,17 @@ void	handle_signal_child(int signum)
 
 void	setup_signal_child(void)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, handle_signal_child);
 	signal(SIGQUIT, handle_signal_child);
 }
 
 void	setup_signal_heredoc(void)
 {
+	struct termios original;
+	
+	tcgetattr(STDIN_FILENO, &original);
+	original.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &original);
 	signal(SIGINT, handle_signal_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }

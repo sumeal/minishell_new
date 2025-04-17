@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:03:21 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/16 15:14:14 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:49:40 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ int		handle_last_command_output(t_cmd *cmd, t_exec_cmd *vars);
 
 /*execution_utils3.c*/
 void	handle_signal_heredoc(int signum);
-int		hd_printf(char *hd_delimeter);
+int		hd_printf(char *hd_delimeter, int *g_exit_status);
 int		exit_function(t_cmd *commands, char **mini_envp, int *g_exit_status);
 void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status);
 void	handle_output_redir(t_cmd *cmd, int cmd_count, t_exec_cmd *vars);
@@ -186,6 +186,7 @@ void	handle_output_redir(t_cmd *cmd, int cmd_count, t_exec_cmd *vars);
 void	free_pipe(t_exec_cmd *vars);
 char	*get_shlvl_value(char **envp, int index);
 void	increment_shlvl(char ***envp);
+char	*check_xcess(char *cmd);
 
 /*execution_builtin.c*/
 int		print_echo(char **commands, int *g_exit_status);

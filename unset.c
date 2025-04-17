@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:24:29 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/16 15:17:58 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:45:52 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	unset_variable(char *var, char ***envp)
 		}
 		(*envp)[j] = NULL;
 	}
-		
 }
 
 int	find_index(char *var, char **envp)

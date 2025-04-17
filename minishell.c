@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:12:22 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/16 16:20:20 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:50:49 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void print_cmd(t_cmd *cmd)
 	}
 
 	printf("🧾 Command Details:\n");
-
 	// Print arguments
 	printf("  argv: ");
 	if (cmd->argv)
@@ -97,12 +96,12 @@ void	minishell_loop(char ***mini_envp, struct termios *original_term,
 		commands = syntactic_analysis(input, *mini_envp, g_exit_status);
 		if (commands)
 		{
-			while (commands != NULL)
-			{
-				print_cmd(commands);
-				commands = commands->next;
-			}
-			//execution(commands, mini_envp, g_exit_status);
+			// while (commands != NULL)
+			// {
+			// 	print_cmd(commands);
+			// 	commands = commands->next;
+			// }
+			execution(commands, mini_envp, g_exit_status);
 			free_cmds(commands);
 		}
 		free(input);

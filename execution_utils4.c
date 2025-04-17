@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:35:48 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/15 15:38:11 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/17 09:39:22 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,12 @@ void	increment_shlvl(char ***envp)
 		free((*envp)[index]);
 		(*envp)[index] = new;
 	}
+}
+
+char	*check_xcess(char *cmd)
+{
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	else
+		return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:16:54 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/16 15:25:41 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/17 09:38:40 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	execute_external_command(t_cmd *cur, char **envp)
 
 	if (ft_strncmp(cur->argv[0], "./", 2) == 0)
 		execve(cur->argv[0], cur->argv, envp);
-	path = get_path(cur->argv[0], envp);
+	if (ft_strncmp(cur->argv[0], "/", 1) == 0)
+		path = check_xcess(cur->argv[0]);
+	else	
+		path = get_path(cur->argv[0], envp);
 	if (path == NULL)
 	{
 		ft_putstr_fd(cur->argv[0], STDERR_FILENO);
