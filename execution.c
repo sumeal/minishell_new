@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:51:58 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/16 11:47:13 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:59:50 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
 	cur = cmd;
 	while (vars->i < (*vars).cmd_count)
 	{
-		(*vars).pid[vars->i] = fork();
 		setup_signal_child();
+		(*vars).pid[vars->i] = fork();
 		if (vars->pid[vars->i] < 0)
 		{
 			perror("fork");

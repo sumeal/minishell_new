@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:59:07 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/17 16:14:35 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:23:03 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,33 @@ void	setup_signal_child(void)
 	signal(SIGQUIT, handle_signal_child);
 }
 
-void	setup_signal_heredoc(void)
+// void	setup_signal_heredoc(void)
+// {
+// 	struct termios original;
+	
+// 	tcgetattr(STDIN_FILENO, &original);
+// 	original.c_lflag &= ~ECHOCTL;
+// 	tcsetattr(STDIN_FILENO, TCSANOW, &original);
+// 	//signal(SIGINT, SIG_IGN);
+// 	signal(SIGINT, handle_signal_heredoc);
+// 	signal(SIGQUIT, SIG_IGN);
+// }
+
+void setup_signal_heredoc(void)
 {
+	struct sigaction	s_int;
+	struct sigaction	s_quit;
 	struct termios original;
 	
 	tcgetattr(STDIN_FILENO, &original);
 	original.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &original);
-	signal(SIGINT, handle_signal_heredoc);
-	signal(SIGQUIT, SIG_IGN);
+	s_int.sa_handler = handle_signal_heredoc;
+    sigemptyset(&s_int.sa_mask);
+	s_int.sa_flags = 0;
+	sigaction(SIGINT, &s_int, NULL);
+	s_quit.sa_handler = SIG_IGN;
+	sigemptyset(&s_quit.sa_mask);
+	s_quit.sa_flags = 0;
+    sigaction(SIGQUIT, &s_quit, NULL);
 }

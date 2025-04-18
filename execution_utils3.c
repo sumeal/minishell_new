@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 08:32:49 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/17 16:46:59 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:35:18 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,61 +16,110 @@ void	handle_signal_heredoc(int signum)
 {
 	if (signum == SIGINT)
 	{
-        write(STDOUT_FILENO, "\n", 1);
 		exit(130);
 	}
 }
 
-int	hd_printf(char *hd_delimeter, int *g_exit_status)
+int hd_printf(char *hd_delimiter, int *g_exit_status)
 {
-	int		pipe_fd[2];
-	char	*line;
-	pid_t	pid;
-	int		status;
+    int pipe_fd[2];
+    char *line;
+    pid_t pid;
+    int status;
+    struct termios original_parent_termios;
+    int stdin_is_tty = isatty(STDIN_FILENO);
+    void (*orig_sigint)(int) = SIG_DFL;
+    void (*orig_sigquit)(int) = SIG_DFL;
 
-	if (pipe(pipe_fd) < 0)
-		return (-1);
-	pid = fork();
-	if (pid == 0)
+    if (stdin_is_tty && tcgetattr(STDIN_FILENO, &original_parent_termios) == -1)
 	{
+        perror("minishell: tcgetattr (parent)");
+        return (-1);
+    }
+    if (pipe(pipe_fd) < 0)
+	{
+        perror("minishell: pipe");
+        return (-1);
+    }
+    orig_sigint = signal(SIGINT, SIG_IGN);
+    orig_sigquit = signal(SIGQUIT, SIG_IGN);
+    pid = fork();
+
+    if (pid < 0)
+    {
+        perror("minishell: fork");
+        close(pipe_fd[0]);
+        close(pipe_fd[1]);
+        signal(SIGINT, orig_sigint);
+        signal(SIGQUIT, orig_sigquit);
+        if (stdin_is_tty)
+             tcsetattr(STDIN_FILENO, TCSANOW, &original_parent_termios);
+        return (-1);
+    }
+
+    if (pid == 0)
+    {
+		rl_catch_signals = 0;
 		setup_signal_heredoc();
-		close(pipe_fd[0]);
-		while (1)
-		{
-			line = readline("> ");
-			if (!line)
-			{
-				close(pipe_fd[1]);
-				exit(130);
-			}
-			if (ft_strcmp(line, hd_delimeter) == 0)
-			{
-				free(line);
-				close(pipe_fd[1]);
-				exit(EXIT_SUCCESS);
-			}
-			ft_putendl_fd(line, pipe_fd[1]);
-			free(line);
-		}
-	}
-	else
-	{
-		close(pipe_fd[1]);
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			*g_exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			*g_exit_status = 128 + WTERMSIG(status);
+		struct sigaction check;
+		sigaction(SIGQUIT, NULL, &check);
+		if (check.sa_handler == SIG_IGN)
+    		printf("SIGQUIT is ignored\n");
 		else
-			*g_exit_status = 127;
-
-		if (*g_exit_status == 130)
+    		printf("SIGQUIT is NOT ignored\n");
+        close(pipe_fd[0]);
+        while (1)
+        {
+            line = readline("> ");
+            if (!line) { // EOF
+                close(pipe_fd[1]);
+                exit(EXIT_SUCCESS);
+            }
+            if (ft_strcmp(line, hd_delimiter) == 0)
+			{
+                free(line);
+                close(pipe_fd[1]);
+                exit(EXIT_SUCCESS);
+            }
+            ft_putendl_fd(line, pipe_fd[1]);
+            free(line);
+        }
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        close(pipe_fd[1]);
+        waitpid(pid, &status, 0);
+        signal(SIGINT, orig_sigint);
+        signal(SIGQUIT, orig_sigquit);
+        if (stdin_is_tty)
 		{
-			close(pipe_fd[0]);
-			return (-1);
-		}
-		return pipe_fd[0];
-	}
+             if (tcsetattr(STDIN_FILENO, TCSANOW, &original_parent_termios) == -1)
+			 {
+                 perror("minishell: tcsetattr (parent restore)");
+             }
+        }
+        if (WIFEXITED(status))
+            *g_exit_status = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status))
+            *g_exit_status = 128 + WTERMSIG(status);
+        else
+            *g_exit_status = 127;
+        if (*g_exit_status == 130) {
+            close(pipe_fd[0]);
+            return (-1);
+        }
+        if (*g_exit_status == EXIT_SUCCESS)
+		{
+             return (pipe_fd[0]);
+        }
+		else
+		{
+            close(pipe_fd[0]);
+            return (-1);
+        }
+    }
+    return (-1);
 }
 
 
@@ -120,7 +169,7 @@ void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
 	if (vars->i == 0 || cmd->input_file)
 	{
 		if (setup_input(cmd, vars, g_exit_status) < 0)
-			exit(EXIT_FAILURE);
+			exit(*g_exit_status);
 	}
 	else if (vars->i > 0)
 	{
