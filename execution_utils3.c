@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 08:32:49 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/18 15:35:18 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:55:55 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ void	handle_signal_heredoc(int signum)
 	}
 }
 
+int is_quoted_delimiter(const char *delim)
+{
+    size_t len = strlen(delim);
+    return (len >= 2 && ((delim[0] == '\'' && delim[len-1] == '\'') ||
+                         (delim[0] == '"' && delim[len-1] == '"')));
+}
+
 int hd_printf(char *hd_delimiter, int *g_exit_status)
 {
     int pipe_fd[2];
@@ -30,6 +37,8 @@ int hd_printf(char *hd_delimiter, int *g_exit_status)
     int stdin_is_tty = isatty(STDIN_FILENO);
     void (*orig_sigint)(int) = SIG_DFL;
     void (*orig_sigquit)(int) = SIG_DFL;
+
+	int quoted = is_quoted_delimiter(hd_delimiter);
 
     if (stdin_is_tty && tcgetattr(STDIN_FILENO, &original_parent_termios) == -1)
 	{
@@ -81,6 +90,12 @@ int hd_printf(char *hd_delimiter, int *g_exit_status)
                 close(pipe_fd[1]);
                 exit(EXIT_SUCCESS);
             }
+			if (!quoted)
+			{
+				char *expanded = expand_lexem(line, mini_envp, *g_exit_status);
+				free(line);
+				line = expanded;
+			}
             ft_putendl_fd(line, pipe_fd[1]);
             free(line);
         }
