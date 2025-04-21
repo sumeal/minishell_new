@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:16:54 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/18 16:57:04 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:33:44 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	execute_command_in_child(t_cmd *cur, t_exec_cmd *vars,
 			int *g_exit_status, char ***envp)
 {
 	setup_io(cur, vars->cmd_count, vars, g_exit_status);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (execute_builtin_command(&cur, envp, g_exit_status) == 1)
 		exit(EXIT_SUCCESS);
 	execute_external_command(cur, *envp);

@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:53:19 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/16 11:36:14 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:58:04 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ char	*expand_str(char *s, char **mini_envp, int status)
 	arr = split_keep_delimiter(s, '$');
 	if (!arr)
 		return (NULL);
-	i = 0;
-	while (arr[i])
+	i = -1;
+	while (arr[++i])
 	{
 		if (arr[i][0] == '$' && (ft_isalpha(arr[i][1]) || arr[i][1] == '?'))
 		{
@@ -137,7 +137,7 @@ char	*expand_str(char *s, char **mini_envp, int status)
 			free(arr[i]);
 			arr[i] = str;
 		}
-		i++;
 	}
+	free(key);
 	return (concatenate(arr));
 }

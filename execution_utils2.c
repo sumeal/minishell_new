@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:36:19 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/17 15:48:37 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/21 08:44:46 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	setup_input(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
 	}
 	else if (cmd->hd_delimeter)
 	{
-		vars->fdin = hd_printf(cmd->hd_delimeter, g_exit_status);
+		vars->fdin = hd_printf(cmd->hd_delimeter, g_exit_status, vars);
 		if (vars->fdin < 0)
 		{
 			*g_exit_status = 130;

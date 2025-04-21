@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:03:21 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/17 15:49:40 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/21 13:54:43 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_exec_cmd
 	int		builtin_executed;
 	int		cmd_count;
 	int		i;
+	char	**envp;
 }	t_exec_cmd;
 
 typedef struct s_bool
@@ -177,7 +178,7 @@ int		handle_last_command_output(t_cmd *cmd, t_exec_cmd *vars);
 
 /*execution_utils3.c*/
 void	handle_signal_heredoc(int signum);
-int		hd_printf(char *hd_delimeter, int *g_exit_status);
+int hd_printf(char *hd_delimiter, int *g_exit_status, t_exec_cmd *vars);
 int		exit_function(t_cmd *commands, char **mini_envp, int *g_exit_status);
 void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status);
 void	handle_output_redir(t_cmd *cmd, int cmd_count, t_exec_cmd *vars);
@@ -210,12 +211,14 @@ int		count_command(t_cmd *cmd);
 void	closing_pipes(t_exec_cmd **vars);
 
 /*signal.c*/
+void	handle_signal_child_exit(int signum);
 void	handle_signal_parent(int signum);
 void	setup_signal_handlers(struct termios *original_term,
 			struct termios *new_term);
 void	handle_signal_child(int signum);
 void	setup_signal_child(void);
 void	setup_signal_heredoc(void);
+void	change_signal(int to_child);
 
 /*libft_utils.c*/
 char	*ft_strcpy(char *dest, char *src);

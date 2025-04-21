@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:12:22 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/17 11:50:49 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:20:47 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char	**copy_envp(char **envp)
 
 void	free_all(char **mini_envp, struct termios *original_term)
 {
-	tcsetattr(STDERR_FILENO, TCSANOW, original_term);
+	(void)original_term;
+	// tcsetattr(STDERR_FILENO, TCSANOW, original_term);
 	free_path(mini_envp);
 	rl_clear_history();
 }
@@ -80,9 +81,11 @@ void	minishell_loop(char ***mini_envp, struct termios *original_term,
 	char	*input;
 	t_cmd	*commands;
 
+	(void)original_term;
+	(void)new_term;
+	change_signal(0);
 	while (1)
 	{
-		setup_signal_handlers(original_term, new_term);
 		input = readline("🚀minishell🚀> ");
 		if (g_signal == 130)
 		{
@@ -103,6 +106,7 @@ void	minishell_loop(char ***mini_envp, struct termios *original_term,
 			// }
 			execution(commands, mini_envp, g_exit_status);
 			free_cmds(commands);
+			g_signal = 0;
 		}
 		free(input);
 	}

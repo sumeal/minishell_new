@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:51:58 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/18 15:59:50 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:34:25 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
 {
 	t_cmd	*cur;
 
+	vars->envp = *envp;
 	vars->i = 0;
 	cur = cmd;
 	while (vars->i < (*vars).cmd_count)
 	{
-		setup_signal_child();
 		(*vars).pid[vars->i] = fork();
 		if (vars->pid[vars->i] < 0)
 		{
@@ -31,6 +31,13 @@ void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
 		if (vars->pid[vars->i] == 0)
 		{
 			execute_command_in_child(cur, vars, g_exit_status, envp);
+		}
+		else
+		{
+			signal(SIGINT, SIG_IGN);
+			signal(SIGQUIT, SIG_IGN);
+			signal(SIGINT, handle_signal_child);
+			signal(SIGQUIT, handle_signal_child_exit);
 		}
 		if (cur->next)
 			cur = cur->next;
@@ -52,6 +59,7 @@ void	run_the_commands(t_cmd *cmd, int *g_exit_status,
 	if (vars->cmd_count != 1)
 		closing_pipes(&vars);
 	wait_for_child(vars);
+	change_signal(0);
 	set_exit_status(vars, g_exit_status);
 	restore_original_fd(vars);
 	free(vars->pid);

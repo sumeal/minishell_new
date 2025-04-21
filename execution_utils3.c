@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 08:32:49 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/18 16:55:55 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:42:22 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	handle_signal_heredoc(int signum)
 {
 	if (signum == SIGINT)
 	{
-		exit(130);
+		write(STDOUT_FILENO, "^C", 3);
+        exit(130);
 	}
 }
 
@@ -27,60 +28,39 @@ int is_quoted_delimiter(const char *delim)
                          (delim[0] == '"' && delim[len-1] == '"')));
 }
 
-int hd_printf(char *hd_delimiter, int *g_exit_status)
+int hd_printf(char *hd_delimiter, int *g_exit_status, t_exec_cmd *vars)
 {
     int pipe_fd[2];
     char *line;
     pid_t pid;
     int status;
-    struct termios original_parent_termios;
-    int stdin_is_tty = isatty(STDIN_FILENO);
-    void (*orig_sigint)(int) = SIG_DFL;
-    void (*orig_sigquit)(int) = SIG_DFL;
 
-	int quoted = is_quoted_delimiter(hd_delimiter);
-
-    if (stdin_is_tty && tcgetattr(STDIN_FILENO, &original_parent_termios) == -1)
-	{
-        perror("minishell: tcgetattr (parent)");
-        return (-1);
-    }
+	// signal(SIGINT, SIG_IGN);
+	// signal(SIGQUIT, SIG_IGN);
     if (pipe(pipe_fd) < 0)
 	{
         perror("minishell: pipe");
         return (-1);
     }
-    orig_sigint = signal(SIGINT, SIG_IGN);
-    orig_sigquit = signal(SIGQUIT, SIG_IGN);
-    pid = fork();
 
+    pid = fork();
     if (pid < 0)
     {
         perror("minishell: fork");
         close(pipe_fd[0]);
         close(pipe_fd[1]);
-        signal(SIGINT, orig_sigint);
-        signal(SIGQUIT, orig_sigquit);
-        if (stdin_is_tty)
-             tcsetattr(STDIN_FILENO, TCSANOW, &original_parent_termios);
         return (-1);
     }
-
     if (pid == 0)
     {
-		rl_catch_signals = 0;
-		setup_signal_heredoc();
-		struct sigaction check;
-		sigaction(SIGQUIT, NULL, &check);
-		if (check.sa_handler == SIG_IGN)
-    		printf("SIGQUIT is ignored\n");
-		else
-    		printf("SIGQUIT is NOT ignored\n");
+        signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_IGN);
         close(pipe_fd[0]);
         while (1)
         {
             line = readline("> ");
-            if (!line) { // EOF
+            if (!line)
+            {
                 close(pipe_fd[1]);
                 exit(EXIT_SUCCESS);
             }
@@ -90,12 +70,7 @@ int hd_printf(char *hd_delimiter, int *g_exit_status)
                 close(pipe_fd[1]);
                 exit(EXIT_SUCCESS);
             }
-			if (!quoted)
-			{
-				char *expanded = expand_lexem(line, mini_envp, *g_exit_status);
-				free(line);
-				line = expanded;
-			}
+            line = expand_lexem(line, vars->envp, *g_exit_status);
             ft_putendl_fd(line, pipe_fd[1]);
             free(line);
         }
@@ -103,24 +78,19 @@ int hd_printf(char *hd_delimiter, int *g_exit_status)
     }
     else
     {
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+        signal(SIGINT, handle_signal_heredoc);
         close(pipe_fd[1]);
         waitpid(pid, &status, 0);
-        signal(SIGINT, orig_sigint);
-        signal(SIGQUIT, orig_sigquit);
-        if (stdin_is_tty)
-		{
-             if (tcsetattr(STDIN_FILENO, TCSANOW, &original_parent_termios) == -1)
-			 {
-                 perror("minishell: tcsetattr (parent restore)");
-             }
-        }
         if (WIFEXITED(status))
             *g_exit_status = WEXITSTATUS(status);
         else if (WIFSIGNALED(status))
             *g_exit_status = 128 + WTERMSIG(status);
         else
             *g_exit_status = 127;
-        if (*g_exit_status == 130) {
+        if (*g_exit_status == 130)
+        {
             close(pipe_fd[0]);
             return (-1);
         }
