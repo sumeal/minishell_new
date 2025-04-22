@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:36:19 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/21 08:44:46 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:41:14 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,22 @@ char	*get_path(char *cmd, char **envp)
 
 int	setup_input(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
 {
-	if (cmd->input_file)
+	if (cmd->hd_delimeter)
+	{
+		vars->fdin = open("/tmp/temporary", O_RDONLY);
+		if (vars->fdin < 0)
+		{
+			*g_exit_status = 1;
+			return (print_error("heredoc", -1));
+		}
+	}
+	else if (cmd->input_file)
 	{
 		vars->fdin = open(cmd->input_file, O_RDONLY);
 		if (vars->fdin < 0)
 		{
 			*g_exit_status = 1;
 			return (print_error(cmd->input_file, -1));
-		}
-	}
-	else if (cmd->hd_delimeter)
-	{
-		vars->fdin = hd_printf(cmd->hd_delimeter, g_exit_status, vars);
-		if (vars->fdin < 0)
-		{
-			*g_exit_status = 130;
-			return (-1);
 		}
 	}
 	else

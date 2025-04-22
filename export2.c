@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:06:11 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/25 10:08:07 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:30:09 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,14 @@ int	check_valid_value(char *s)
 {
 	int	i;
 
-	i = 0;
-	while (s[i])
+	i = 0;	
+	while (s[i] && s[i] != '=')
 	{
-		if (!(ft_isalnum(s[i]) != 0 || s[i] == '_' || s[i] == '='))
+		if (!(ft_isalnum(s[i]) != 0 || s[i] == '_') && (ft_isdigit(s[0])))
 		{
-			ft_putstr_fd("bash: ", STDERR_FILENO);
-			ft_putstr_fd(s + i, STDERR_FILENO);
-			ft_putstr_fd(": event not found\n", STDERR_FILENO);
+			ft_putstr_fd("bash: export: `", STDERR_FILENO);
+			ft_putstr_fd(s, STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 			return (-1);
 		}
 		i++;

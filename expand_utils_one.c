@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:53:19 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/21 16:58:04 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/22 18:50:11 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ static char	*dup_whole(char *str, char *key, char **mini_envp, int status)
 		return (env_sta);
 	dup = ft_strjoin(env_sta, tail);
 	free(env_sta);
-	free(key);
 	if (!dup)
 		return (NULL);
 	return (dup);
@@ -98,7 +97,7 @@ static char	*find_key(char *dollar)
 	int		i;
 
 	count = 1;
-	while (dollar[count] && (ft_isalpha(dollar[count]) || dollar[1] == '?'))
+	while (dollar[count] && (ft_isalpha(dollar[count]) || dollar[1] == '?' || dollar[count] == '_'))
 		count++;
 	key = (char *)malloc(count);
 	if (!key)
@@ -132,12 +131,12 @@ char	*expand_str(char *s, char **mini_envp, int status)
 			if (!key)
 				return (NULL);
 			str = dup_whole(arr[i], key, mini_envp, status);
+			free(key);
 			if (!str)
 				return (NULL);
 			free(arr[i]);
 			arr[i] = str;
 		}
 	}
-	free(key);
 	return (concatenate(arr));
 }

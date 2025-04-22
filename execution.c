@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:51:58 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/21 15:34:25 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/22 21:22:47 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
 {
 	t_cmd	*cur;
 
-	vars->envp = *envp;
 	vars->i = 0;
 	cur = cmd;
 	while (vars->i < (*vars).cmd_count)
@@ -45,9 +44,69 @@ void	create_child_processes(t_cmd *cmd, t_exec_cmd *vars,
 	}
 }
 
+void	process_heredoc(t_cmd *cmd, int input_fd, t_exec_cmd *vars, int *g_exit_status)
+{
+	char	*line;
+
+	while (1)
+    {
+        line = readline("> ");
+        if (!line) // End of input (Ctrl+D)
+        {
+	         exit(EXIT_SUCCESS);
+        }
+        if (ft_strcmp(line, cmd->hd_delimeter) == 0)
+        {
+            free(line);
+        	exit(EXIT_SUCCESS);
+        }
+        line = expand_lexem(line, vars->envp, *g_exit_status);
+        ft_putendl_fd(line, input_fd);
+        free(line);
+    }
+    exit(EXIT_FAILURE); // Exit with failure if the loop ends unexpectedly
+}
+
+void	handle_heredoc(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
+{
+	pid_t	hd_pid;
+	int		status;
+	int		fd;
+	
+	fd = open("/tmp/temporary", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	hd_pid = fork();
+	if (hd_pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		process_heredoc(cmd, fd, vars, g_exit_status);
+		close(fd);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		signal(SIGINT, handle_signal_heredoc);
+		waitpid(hd_pid, &status, 0);
+		if (WIFSIGNALED(status))
+		{
+			*g_exit_status = 130;
+			cmd->is_hd = 99;
+		}
+	}
+	close(fd);
+}
+
+void	here_doc_process(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status)
+{
+	if (cmd->is_hd)
+		handle_heredoc(cmd, vars, g_exit_status);
+	else
+		return ;
+}
+
 void	run_the_commands(t_cmd *cmd, int *g_exit_status,
 			t_exec_cmd *vars, char ***envp)
 {
+	vars->envp = *envp;
 	vars->pid = malloc(sizeof(pid_t) * vars->cmd_count);
 	if (!vars->pid)
 	{
@@ -55,6 +114,9 @@ void	run_the_commands(t_cmd *cmd, int *g_exit_status,
 		exit(1);
 	}
 	save_original_fd(vars);
+	here_doc_process(cmd, vars, g_exit_status);
+	if (cmd->is_hd == 99)
+		return ;
 	create_child_processes(cmd, vars, g_exit_status, envp);
 	if (vars->cmd_count != 1)
 		closing_pipes(&vars);

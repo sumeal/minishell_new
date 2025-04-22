@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:21:31 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/16 10:42:25 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/22 18:29:18 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ t_cmd	*syntactic_analysis(char *input, char **mini_envp, int *status)
 	}
 	if (!process_tokens(lexems, &head))
 		return (NULL);
+	if (lexems)
+		free_lexems(lexems);
 	return (head);
 }
 

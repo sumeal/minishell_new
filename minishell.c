@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:12:22 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/21 15:20:47 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:58:00 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,59 +30,17 @@ char	**copy_envp(char **envp)
 	return (copy);
 }
 
-void	free_all(char **mini_envp, struct termios *original_term)
+void	free_all(char **mini_envp)
 {
-	(void)original_term;
-	// tcsetattr(STDERR_FILENO, TCSANOW, original_term);
 	free_path(mini_envp);
 	rl_clear_history();
 }
 
-
-void print_cmd(t_cmd *cmd)
-{
-	int i;
-
-	if (!cmd)
-	{
-		printf("🔍 Command is NULL\n");
-		return;
-	}
-
-	printf("🧾 Command Details:\n");
-	// Print arguments
-	printf("  argv: ");
-	if (cmd->argv)
-	{
-		for (i = 0; cmd->argv[i]; i++)
-			printf("\"%s\" ", cmd->argv[i]);
-		printf("\n");
-	}
-	else
-		printf("(null)\n");
-
-	// Print redirections
-	printf("  input_file: %s\n", cmd->input_file ? cmd->input_file : "(null)");
-	printf("  output_file: %s\n", cmd->output_file ? cmd->output_file : "(null)");
-	printf("  append: %d\n", cmd->append);
-	printf("  here_doc delimeter: %s\n", cmd->hd_delimeter ? cmd->hd_delimeter : "(null)");
-	printf("  is_here_doc: %d\n", cmd->is_hd);
-
-	// Optional: show links in the command list
-	printf("  has next: %s\n", cmd->next ? "yes" : "no");
-	printf("  has prev: %s\n", cmd->prev ? "yes" : "no");
-	printf("--------------------------------\n");
-}
-
-
-void	minishell_loop(char ***mini_envp, struct termios *original_term,
-			struct termios *new_term, int *g_exit_status)
+void	minishell_loop(char ***mini_envp, int *g_exit_status)
 {
 	char	*input;
 	t_cmd	*commands;
 
-	(void)original_term;
-	(void)new_term;
 	change_signal(0);
 	while (1)
 	{
@@ -99,18 +57,12 @@ void	minishell_loop(char ***mini_envp, struct termios *original_term,
 		commands = syntactic_analysis(input, *mini_envp, g_exit_status);
 		if (commands)
 		{
-			// while (commands != NULL)
-			// {
-			// 	print_cmd(commands);
-			// 	commands = commands->next;
-			// }
 			execution(commands, mini_envp, g_exit_status);
 			free_cmds(commands);
 			g_signal = 0;
 		}
 		free(input);
 	}
-	printf("exit\n");
 }
 
 char	**init_env(char **envp)
@@ -126,15 +78,14 @@ char	**init_env(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	char			**mini_envp;
-	struct termios	original_term;
-	struct termios	new_term;
 	int				g_exit_status;
 
 	(void)argc;
 	(void)argv;
 	g_exit_status = 0;
 	mini_envp = init_env(envp);
-	minishell_loop(&mini_envp, &original_term, &new_term, &g_exit_status);
-	free_all(mini_envp, &original_term);
+	minishell_loop(&mini_envp, &g_exit_status);
+	printf("exit\n");
+	free_all(mini_envp);
 	return (g_exit_status);
 }

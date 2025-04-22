@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 08:32:49 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/21 16:42:22 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:54:31 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,126 +16,10 @@ void	handle_signal_heredoc(int signum)
 {
 	if (signum == SIGINT)
 	{
-		write(STDOUT_FILENO, "^C", 3);
-        exit(130);
+		write(STDOUT_FILENO, "^C\n", 3);
+        g_signal = 130;
 	}
 }
-
-int is_quoted_delimiter(const char *delim)
-{
-    size_t len = strlen(delim);
-    return (len >= 2 && ((delim[0] == '\'' && delim[len-1] == '\'') ||
-                         (delim[0] == '"' && delim[len-1] == '"')));
-}
-
-int hd_printf(char *hd_delimiter, int *g_exit_status, t_exec_cmd *vars)
-{
-    int pipe_fd[2];
-    char *line;
-    pid_t pid;
-    int status;
-
-	// signal(SIGINT, SIG_IGN);
-	// signal(SIGQUIT, SIG_IGN);
-    if (pipe(pipe_fd) < 0)
-	{
-        perror("minishell: pipe");
-        return (-1);
-    }
-
-    pid = fork();
-    if (pid < 0)
-    {
-        perror("minishell: fork");
-        close(pipe_fd[0]);
-        close(pipe_fd[1]);
-        return (-1);
-    }
-    if (pid == 0)
-    {
-        signal(SIGINT, SIG_DFL);
-        signal(SIGQUIT, SIG_IGN);
-        close(pipe_fd[0]);
-        while (1)
-        {
-            line = readline("> ");
-            if (!line)
-            {
-                close(pipe_fd[1]);
-                exit(EXIT_SUCCESS);
-            }
-            if (ft_strcmp(line, hd_delimiter) == 0)
-			{
-                free(line);
-                close(pipe_fd[1]);
-                exit(EXIT_SUCCESS);
-            }
-            line = expand_lexem(line, vars->envp, *g_exit_status);
-            ft_putendl_fd(line, pipe_fd[1]);
-            free(line);
-        }
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-        signal(SIGINT, handle_signal_heredoc);
-        close(pipe_fd[1]);
-        waitpid(pid, &status, 0);
-        if (WIFEXITED(status))
-            *g_exit_status = WEXITSTATUS(status);
-        else if (WIFSIGNALED(status))
-            *g_exit_status = 128 + WTERMSIG(status);
-        else
-            *g_exit_status = 127;
-        if (*g_exit_status == 130)
-        {
-            close(pipe_fd[0]);
-            return (-1);
-        }
-        if (*g_exit_status == EXIT_SUCCESS)
-		{
-             return (pipe_fd[0]);
-        }
-		else
-		{
-            close(pipe_fd[0]);
-            return (-1);
-        }
-    }
-    return (-1);
-}
-
-
-// int	hd_printf(char *hd_delimeter)
-// {
-// 	int		pipe_fd[2];
-// 	char	*line;
-
-// 	if (pipe(pipe_fd) < 0)
-// 		return (-1);
-// 	setup_signal_heredoc();
-// 	while (1)
-// 	{
-// 		line = readline("> ");
-// 		if (!line || g_signal == 130)
-// 		{
-// 			close(pipe_fd[0]);
-// 			close(pipe_fd[1]);
-// 			return (-1);
-// 		}
-// 		if (ft_strcmp(line, hd_delimeter) == 0)
-// 		{
-// 			free(line);
-// 			break ;
-// 		}
-// 		ft_putendl_fd(line, pipe_fd[1]);
-// 		free(line);
-// 	}
-// 	close(pipe_fd[1]);
-// 	return (pipe_fd[0]);
-// }
 
 int	exit_function(t_cmd *commands, char **mini_envp, int *g_exit_status)
 {
