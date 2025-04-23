@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:03:21 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/22 15:54:10 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/23 23:46:18 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ char	*check_xcess(char *cmd);
 int		print_echo(char **commands, int *g_exit_status);
 void	handle_directory_change(char **cmd,
 			char ***mini_envp, int *g_exit_status);
-void	update_env_vars(char **mini_envp, char *cur_dir);
+void	update_env_vars(char ***mini_envp, char *cur_dir);
 void	change_directory(t_cmd **commands,
 			char ***mini_envp, int *g_exit_status);
 

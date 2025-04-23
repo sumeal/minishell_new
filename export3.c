@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:13:08 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/03/24 13:16:09 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/23 23:44:01 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	add_new_variable(char ***envp, char **new_var)
 	new_envp = ft_calloc(count + 2, sizeof(char *));
 	if (!new_envp)
 	{
-		free(new_var);
+		free(*new_var);
 		return ;
 	}
 	i = 0;
@@ -31,7 +31,6 @@ void	add_new_variable(char ***envp, char **new_var)
 		new_envp[i] = ft_strdup((*envp)[i]);
 		i++;
 	}
-	free(new_envp[i]);
 	new_envp[i] = *new_var;
 	new_envp[i + 1] = NULL;
 	free_path(*envp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_builtin2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:51:54 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/22 21:50:52 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/23 23:41:19 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ void	change_to_pwd(char ***mini_envp, int *g_exit_status)
 	}
 }
 
+void	add_path_to_env(char ***envp, char *old)
+{
+	char	*new;
+
+	new = ft_strdup(old);
+	add_new_variable(envp, &new);
+}
+
 void	update_env(char *dir, char *name, char ***mini_envp)
 {
 	char	*new;
@@ -61,7 +69,7 @@ void	update_env(char *dir, char *name, char ***mini_envp)
 		}
 		i++;
 	}
-	free(new);
+	add_new_variable(mini_envp, &new);
 }
 
 int	print_env(t_cmd **cmd_list, char **envp, int *g_exit_status)

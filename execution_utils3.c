@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 08:32:49 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/22 15:54:31 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:05:48 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,11 @@ void	handle_signal_heredoc(int signum)
 
 int	exit_function(t_cmd *commands, char **mini_envp, int *g_exit_status)
 {
-	if (!(commands->argv[1]))
+	if (!(commands->argv[1]) && !commands->next && !commands->prev)
 	{
-		printf("exit\n");
 		exit_program(commands, mini_envp, g_exit_status);
 	}
-	else
+	else if (is_num(commands->argv[1]))
 		return (check_exit_value(commands, mini_envp, g_exit_status));
 	return (1);
 }

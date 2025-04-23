@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:30:47 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/16 10:26:30 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:03:55 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	exit_program(t_cmd *commands, char **mini_envp, int *g_exit_status)
 {
+	printf("exit\n");
 	free_cmds(commands);
 	free_path(mini_envp);
 	exit (*g_exit_status);
@@ -42,7 +43,6 @@ int	check_exit_value(t_cmd *commands, char **mini_envp, int *g_exit_status)
 
 	if (commands->next != NULL)
 		return (1);
-	printf("exit\n");
 	if (!(is_num(commands->argv[1])))
 	{
 		error_numeric_arg(commands->argv[1], g_exit_status);

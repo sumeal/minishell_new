@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_builtin.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:48:06 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/16 11:46:41 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/23 23:45:28 by muzz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ void	handle_directory_change(char **cmd,
 			print_error_cd(cmd[1], g_exit_status);
 }
 
-void	update_env_vars(char **mini_envp, char *cur_dir)
+void	update_env_vars(char ***mini_envp, char *cur_dir)
 {
 	char	new_dir[4096];
 
 	getcwd(new_dir, 4096);
-	update_env(cur_dir, "OLDPWD", &mini_envp);
-	update_env(new_dir, "PWD", &mini_envp);
+	update_env(cur_dir, "OLDPWD", mini_envp);
+	update_env(new_dir, "PWD", mini_envp);
 }
 
 void	change_directory(t_cmd **commands,
@@ -92,6 +92,6 @@ void	change_directory(t_cmd **commands,
 	handle_directory_change(cmd, mini_envp, g_exit_status);
 	if (*g_exit_status == 0)
 	{
-		update_env_vars(*mini_envp, cur_dir);
+		update_env_vars(mini_envp, cur_dir);
 	}
 }
