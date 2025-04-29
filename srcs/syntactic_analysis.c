@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:21:31 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/22 18:29:18 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:37:17 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,14 @@ static int	process_tokens(t_token *lexems, t_cmd **head)
 	return (1);
 }
 
-t_cmd	*syntactic_analysis(char *input, char **mini_envp, int *status)
+t_cmd	*syntactic_analysis(char **input, char **mini_envp, int *status)
 {
 	t_token	*lexems;
 	t_cmd	*head;
 
-	lexems = lexical_analysis(input, mini_envp, *status);
+	if (!check_pipe_end(input, status))
+		return (NULL);
+	lexems = lexical_analysis(*input, mini_envp, *status);
 	if (!lexems)
 		return (NULL);
 	if (is_valid_syntax(lexems) == 2)

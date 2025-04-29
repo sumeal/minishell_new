@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:18:47 by jchen2            #+#    #+#             */
-/*   Updated: 2025/03/17 15:41:50 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/04/29 15:09:15 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,19 @@
 
 static void	flag_func(char c, int *num, t_bool *flag)
 {
-	if ((c == '\'' || c == '\"') && !flag->s_s && !flag->d_s)
-	{
-		if (flag->w_s)
-			flag->w_s = false;
-		(*num)++;
-		if (c == '\'')
-			flag->s_s = !flag->s_s;
-		else
-			flag->d_s = !flag->d_s;
-	}
-	else if ((c == '\'' && flag->s_s) || (c == '\"' && flag->d_s))
-	{
-		if (flag->s_s)
-			flag->s_s = !flag->s_s;
-		else
-			flag->d_s = !flag->d_s;
-	}
-	else if ((c != ' ' && c != '\n' && c != '\t')
-		&& !flag->w_s && !flag->s_s && !flag->d_s)
+	if (c == '\'' && !flag->d_s)
+		flag->s_s = !flag->s_s;
+	else if (c == '\"' && !flag->s_s)
+		flag->d_s = !flag->d_s;
+	else if ((c != ' ' && c != '\n' && c != '\t') && !flag->w_s)
 	{
 		(*num)++;
 		flag->w_s = true;
 	}
 	else if ((c == ' ' || c == '\n' || c == '\t') && !flag->s_s && !flag->d_s)
+	{
 		flag->w_s = false;
+	}
 }
 
 static int	num_substr(char *str)
@@ -55,6 +43,7 @@ static int	num_substr(char *str)
 		flag_func(*str, &num, &flag);
 		str++;
 	}
+	printf("num is %d\n", num);
 	return (num);
 }
 

@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:53:19 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/24 08:47:47 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:36:04 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static char	*find_key(char *dollar)
 	int		i;
 
 	count = 1;
-	while (dollar[count] && (ft_isalpha(dollar[count])
+	while (dollar[count] && (ft_isalnum(dollar[count])
 			|| dollar[1] == '?' || dollar[count] == '_'))
 		count++;
 	key = (char *)malloc(count);

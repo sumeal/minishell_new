@@ -6,14 +6,14 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:03:21 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/24 10:27:34 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:46:20 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
@@ -100,7 +100,6 @@ void	free_cmds(t_cmd *cmd);
 
 // lexical analysis
 char	*count_copy_substr(char **str, t_bool *flag);
-void	count_substr(char **str, int *sublen, t_bool *flag);
 char	**ft_split_quotes(char *str);
 char	**split_keep_delimiter(char const *s, char c);
 char	*expand_lexem(char *s, char **mini_envp, int status);
@@ -108,7 +107,7 @@ char	*expand_str(char *s, char **mini_envp, int status);
 t_token	*lexical_analysis(char *input, char **mini_envp, int status);
 
 // syntactic analysis
-t_cmd	*syntactic_analysis(char *input, char **mini_envp, int *status);
+t_cmd	*syntactic_analysis(char **input, char **mini_envp, int *status);
 int		is_valid_syntax(t_token *lexems);
 int		add_arg_to_cmd(t_cmd *cmd, char *value);
 int		handle_hd_apd(t_cmd *cmd, t_token **lexem);
@@ -178,7 +177,7 @@ int		handle_last_command_output(t_cmd *cmd, t_exec_cmd *vars);
 
 /*execution_utils3.c*/
 void	handle_signal_heredoc(int signum);
-int		hd_printf(char *hd_delimiter, int *g_exit_status, t_exec_cmd *vars);
+//int		hd_printf(char *hd_delimiter, int *g_exit_status, t_exec_cmd *vars);
 int		exit_function(t_cmd *commands, char **mini_envp, int *g_exit_status);
 void	handle_input_redir(t_cmd *cmd, t_exec_cmd *vars, int *g_exit_status);
 void	handle_output_redir(t_cmd *cmd, int cmd_count, t_exec_cmd *vars);
@@ -221,16 +220,10 @@ void	closing_pipes(t_exec_cmd **vars);
 /*signal.c*/
 void	handle_signal_child_exit(int signum);
 void	handle_signal_parent(int signum);
-void	setup_signal_handlers(struct termios *original_term,
-			struct termios *new_term);
 void	handle_signal_child(int signum);
-void	setup_signal_child(void);
-void	setup_signal_heredoc(void);
 void	change_signal(int to_child);
 
-/*libft_utils.c*/
-char	*ft_strcpy(char *dest, char *src);
-char	*ft_strcat(char *dest, char *src);
-int		ft_strcmp(const char *s1, const char *s2);
+/*check_pipe_end.c*/
+int		check_pipe_end(char **input, int *status);
 
 #endif

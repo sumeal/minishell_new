@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 12:12:22 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/24 08:46:49 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:38:42 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	minishell_loop(char ***mini_envp, int *g_exit_status)
 			break ;
 		if (*input)
 			add_history(input);
-		commands = syntactic_analysis(input, *mini_envp, g_exit_status);
+		commands = syntactic_analysis(&input, *mini_envp, g_exit_status);
 		if (commands)
 		{
 			execution(commands, mini_envp, g_exit_status);

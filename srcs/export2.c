@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:06:11 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/24 10:23:29 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:40:37 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,17 @@ int	check_valid_value(char *s)
 	int	i;
 
 	i = 0;
+	if (s[0] == '=')
+	{
+		ft_putstr_fd("bash: export: `", STDERR_FILENO);
+		ft_putstr_fd(s, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		return (-1);
+	}
 	while (s[i] && s[i] != '=')
 	{
-		if (!(ft_isalnum(s[i]) != 0 || s[i] == '_') && (ft_isdigit(s[0])))
+		if (!(ft_isalnum(s[i]) != 0 || s[i] == '_' || s[0] == '=')
+			&& (ft_isdigit(s[0])))
 		{
 			ft_putstr_fd("bash: export: `", STDERR_FILENO);
 			ft_putstr_fd(s, STDERR_FILENO);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_keep_delimiter.c                             :+:      :+:    :+:   */
+/*   expand_utils_two.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:48:27 by jchen2            #+#    #+#             */
-/*   Updated: 2025/03/17 15:57:09 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/04/29 14:35:52 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 	5.ft_split: splict string using c
 	This one is a new version ft_split, I keep delimeter when i m spliting
 */
-#include "libft.h"
+#include "minishell.h"
 
 static int	len_substr(char const *ptr1, char const *ptr2)
 {

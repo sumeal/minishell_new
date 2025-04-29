@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:49:29 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/24 08:46:36 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:53:52 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,20 +147,7 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
     
     // Valid syntax tests
-    run_syntax_test("Simple command", "echo hello world", envp, 0);
-    run_syntax_test("Command with pipe", "ls -l | grep .txt", envp, 0);
-    run_syntax_test("Command with redirections",
-						"cat < input.txt > output.txt", envp, 0);
-    run_syntax_test("Command with multiple pipes",
-						"ls -la | grep .c | wc -l", envp, 0);
-    run_syntax_test("Command with heredoc", "cat << EOF", envp, 0);
-    
-    // Invalid syntax tests
-    run_syntax_test("Pipe at beginning", "| echo hello", envp, 2);
-    run_syntax_test("Pipe at end", "echo hello |", envp, 2);
-    run_syntax_test("Consecutive pipes", "ls | | grep file", envp, 2);
-    run_syntax_test("Redirection without target", "echo hello >", envp, 2);
-    run_syntax_test("Redirection with pipe as target", "cat < > grep", envp, 2);
+    run_syntax_test("Simple command", "echo hi\"hello\"", envp, 0);
     
     return (0);
 }

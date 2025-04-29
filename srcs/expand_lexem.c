@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 10:15:18 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/22 18:32:30 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:54:19 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,70 +18,63 @@
 
 #include "minishell.h"
 
-char	*remove_quotes(char *tmp)
+static void	handle_quote_state(char c, bool *in_single, bool *in_double, int *i)
 {
-	int		len;
-	int		i;
-	int		j;
-	char	*str;
-
-	len = ft_strlen(tmp);
-	str = malloc(len - 1);
-	if (!str)
-		return (NULL);
-	i = 1;
-	j = 0;
-	while (i < len - 1)
-	{
-		str[j] = tmp[i];
-		i++;
-		j++;
-	}
-	str[j] = '\0';
-	return (str);
+	if (c == '\'' && !*in_double)
+		*in_single = !*in_single;
+	else if (c == '\"' && !*in_single)
+		*in_double = !*in_double;
+	(*i)++;
 }
 
-int	final_word(char *tmp, char **word)
+static char	*handle_quotes(char *tmp)
 {
-	if (tmp[0] == '\'' || tmp[0] == '\"')
+	char	*clean;
+	int		i;
+	int		j;
+	bool	in_single;
+	bool	in_double;
+
+	in_single = false;
+	in_double = false;
+	i = 0;
+	j = 0;
+	clean = malloc(ft_strlen(tmp) + 1);
+	if (!clean)
+		return (NULL);
+	while (tmp[i])
 	{
-		*word = remove_quotes(tmp);
-		if (!*word)
-		{
-			free(tmp);
-			return (0);
-		}
-		free(tmp);
+		if ((tmp[i] == '\'' && !in_double) || (tmp[i] == '\"' && !in_single))
+			handle_quote_state(tmp[i], &in_single, &in_double, &i);
+		else
+			clean[j++] = tmp[i++];
 	}
-	else
-		*word = tmp;
-	return (1);
+	clean[j] = '\0';
+	free(tmp);
+	return (clean);
 }
 
 char	*expand_lexem(char *s, char **mini_envp, int status)
 {
 	char	*tmp;
-	char	*word;
 	char	*substr;
+	char	*result;
 
 	substr = ft_strdup(s);
 	if (!substr)
 		return (NULL);
+	tmp = substr;
 	if (substr[0] != '\'' && ft_strchr(substr, '$'))
 	{
 		tmp = expand_str(substr, mini_envp, status);
-		if (!tmp)
-		{
-			free(substr);
-			return (NULL);
-		}
 		free(substr);
+		if (!tmp)
+			return (NULL);
 	}
-	else
-		tmp = substr;
-	if (final_word(tmp, &word) == 0)
+	result = handle_quotes(tmp);
+	if (!result)
 		return (NULL);
-	return (word);
+	return (result);
 }
 
 /*
