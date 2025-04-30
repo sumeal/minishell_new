@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:51:58 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/29 14:18:24 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:51:34 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	execute_builtin_command(t_cmd **cmd,
 {
 	if (ft_strcmp((*cmd)->argv[0], "cd") == 0)
 	{
-		if ((*cmd)->prev == NULL && (*cmd)->next == NULL)
+		if ((*cmd)->prev != NULL || (*cmd)->next != NULL)
 			return (1);
 		change_directory(cmd, mini_envp, g_exit_status);
 		return (1);

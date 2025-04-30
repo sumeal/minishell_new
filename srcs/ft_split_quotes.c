@@ -6,7 +6,7 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 15:18:47 by jchen2            #+#    #+#             */
-/*   Updated: 2025/04/29 15:09:15 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:49:52 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static int	num_substr(char *str)
 		flag_func(*str, &num, &flag);
 		str++;
 	}
-	printf("num is %d\n", num);
 	return (num);
 }
 

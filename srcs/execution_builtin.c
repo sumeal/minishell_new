@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_builtin.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: muzz <muzz@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:48:06 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/23 23:45:28 by muzz             ###   ########.fr       */
+/*   Updated: 2025/04/29 15:58:21 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,15 @@ void	handle_directory_change(char **cmd,
 			char ***mini_envp, int *g_exit_status)
 {
 	char	*home;
-	char	cur_dir[4096];
 
-	getcwd(cur_dir, 4096);
 	if (!cmd[1] || ft_strcmp(cmd[1], "~") == 0)
 	{
 		home = ft_getenv("HOME", *mini_envp);
 		if (chdir(home) != 0)
 			print_error_cd(home, g_exit_status);
 	}
-	else if (ft_strcmp(cmd[1], "..") == 0)
-	{
-		if (chdir(cmd[1]) != 0)
-			print_error_cd(cmd[1], g_exit_status);
-	}
 	else if (ft_strcmp(cmd[1], "-") == 0)
-	{
 		change_to_pwd(mini_envp, g_exit_status);
-	}
 	else
 		if (chdir(cmd[1]) != 0)
 			print_error_cd(cmd[1], g_exit_status);
