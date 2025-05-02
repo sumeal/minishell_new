@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 14:07:10 by jchen2            #+#    #+#             */
-/*   Updated: 2024/11/12 19:00:58 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/05/02 08:43:44 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 To test ascii
 */
+
+#include "../includes/libft.h"
+
 int	ft_isascii(int c)
 {
 	if (c >= 0 && c <= 127)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 10:01:10 by jchen2            #+#    #+#             */
-/*   Updated: 2024/11/13 10:32:23 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/05/02 08:43:18 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@ Translate string of number (ASCII) to integer;
 no consderation of whtespace and more than two + or -;
 The return value is the first consecutive numbers with sign;
 */
+
+#include "../includes/libft.h"
+
 int	ft_atoi(const char *nptr)
 {
 	int	sign;

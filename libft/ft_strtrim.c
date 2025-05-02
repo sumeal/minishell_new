@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 10:00:10 by jchen2            #+#    #+#             */
-/*   Updated: 2024/11/15 12:25:25 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/05/02 08:45:43 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 2.checks if each character from the end of s1 is in set
 3. copty the trimmed one
 */
-#include "libft.h"
+#include "../includes/libft.h"
 
 static char	*check_start(char const *s1, char const *set)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:48:27 by jchen2            #+#    #+#             */
-/*   Updated: 2024/11/16 15:21:57 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/05/02 08:44:58 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 	4.set_str_mem: set the memory for each substring
 	5.ft_split: splict string using c
 */
-#include "libft.h"
+#include "../includes/libft.h"
 
 static int	len_substr(char const *ptr1, char const *ptr2)
 {

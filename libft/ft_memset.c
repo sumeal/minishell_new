@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jchen2 <jchen2@student.42kl.edu.my>        +#+  +:+       +#+        */
+/*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 10:03:50 by jchen2            #+#    #+#             */
-/*   Updated: 2024/11/16 15:21:29 by jchen2           ###   ########.fr       */
+/*   Updated: 2025/05/02 08:44:44 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ initial the string of set the string to a secified value;
 n: the number of bytes to be set to the value
 c: The byte value to be set(passed an int but cast to an unsigned char)
 */
-#include "libft.h"
+#include "../includes/libft.h"
 
 void	*ft_memset(void *s, int c, size_t n)
 {

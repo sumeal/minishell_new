@@ -6,11 +6,11 @@
 /*   By: abin-moh <abin-moh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:27:35 by abin-moh          #+#    #+#             */
-/*   Updated: 2025/04/29 14:27:54 by abin-moh         ###   ########.fr       */
+/*   Updated: 2025/05/02 08:45:09 by abin-moh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/libft.h"
 
 char	*ft_strcpy(char *dest, char *src)
 {
